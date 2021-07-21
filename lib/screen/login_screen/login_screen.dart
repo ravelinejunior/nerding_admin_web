@@ -188,6 +188,7 @@ class _LoginScreenState extends State<LoginScreen> {
     return ElevatedButton(
       onPressed: () {
         if (email.isNotEmpty && password.isNotEmpty) {
+          _login();
         } else {
           Fluttertoast.showToast(
             msg: "Preencha todos os campos para acessar!",
