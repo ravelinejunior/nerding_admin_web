@@ -1,6 +1,10 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:nerding_admin_web/screen/home_screen/home_screen.dart';
 import 'package:nerding_admin_web/utils/backgroundPainter.dart';
+import 'package:nerding_admin_web/utils/errorDialog.dart';
+import 'package:nerding_admin_web/utils/loadingDialog.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -12,6 +16,7 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   String email = "";
   String password = "";
+  final _auth = FirebaseAuth.instance;
 
   @override
   Widget build(BuildContext context) {
@@ -90,6 +95,45 @@ class _LoginScreenState extends State<LoginScreen> {
         ),
       ),
     );
+  }
+
+  _login() async {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return LoadingAlertDialog(
+          message: 'Please wait ...',
+        );
+      },
+    );
+
+    User? currentUser;
+    await _auth
+        .signInWithEmailAndPassword(email: email, password: password)
+        .then((mAuth) {
+      currentUser = mAuth.user!;
+    }).catchError((onError) {
+      Navigator.of(context).pop();
+      showDialog(
+        context: context,
+        builder: (context) {
+          return ErrorAlertDialog(
+            message: onError.toString(),
+          );
+        },
+      );
+    });
+
+    if (currentUser != null) {
+      //homePage
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(
+          builder: (context) => HomeScreen(),
+        ),
+      );
+    } else {
+      //loginPage
+    }
   }
 
   _returnEmailField(IconData iconData, bool isObscure) {
