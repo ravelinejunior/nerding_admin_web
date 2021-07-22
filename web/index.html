@@ -39,6 +39,7 @@
 
     if ('serviceWorker' in navigator) {
       // Service workers are supported. Use them.
+
       window.addEventListener('load', function () {
         // Wait for registration to finish before dropping the <script> tag.
         // Otherwise, the browser will load the script multiple times,
@@ -87,7 +88,7 @@
       loadMainDartJs();
     }
   </script>
-  <script src="main.dart.js" type="application/javascript"></script>
+
   <!-- The core Firebase JS SDK is always required and must be listed first -->
   <script src="https://www.gstatic.com/firebasejs/8.7.1/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.7.1/firebase-auth.js"></script>
@@ -113,6 +114,8 @@
     firebase.initializeApp(firebaseConfig);
     firebase.analytics();
   </script>
+
+  <script src="main.dart.js" type="application/javascript"></script>
 
 </body>
 

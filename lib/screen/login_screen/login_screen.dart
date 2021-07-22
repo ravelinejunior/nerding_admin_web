@@ -24,6 +24,7 @@ class _LoginScreenState extends State<LoginScreen> {
     final double _screenWidth = MediaQuery.of(context).size.width;
 
     return Scaffold(
+      backgroundColor: Colors.black87,
       body: SingleChildScrollView(
         child: Stack(
           alignment: Alignment.lerp(
@@ -142,7 +143,7 @@ class _LoginScreenState extends State<LoginScreen> {
       obscureText: isObscure,
       style: TextStyle(
         fontSize: 16,
-        color: Colors.black,
+        color: Colors.white,
       ),
       decoration: InputDecoration(
         enabledBorder: UnderlineInputBorder(
@@ -151,7 +152,7 @@ class _LoginScreenState extends State<LoginScreen> {
           ),
         ),
         hintText: 'Email',
-        hintStyle: TextStyle(color: Colors.black54),
+        hintStyle: TextStyle(color: Colors.white54),
         icon: Icon(
           iconData,
           color: Colors.green,
@@ -166,7 +167,7 @@ class _LoginScreenState extends State<LoginScreen> {
       obscureText: isObscure,
       style: TextStyle(
         fontSize: 16,
-        color: Colors.black,
+        color: Colors.white,
       ),
       decoration: InputDecoration(
         enabledBorder: UnderlineInputBorder(
@@ -175,7 +176,7 @@ class _LoginScreenState extends State<LoginScreen> {
           ),
         ),
         hintText: 'Password',
-        hintStyle: TextStyle(color: Colors.black54),
+        hintStyle: TextStyle(color: Colors.white60),
         icon: Icon(
           iconData,
           color: Colors.green,

@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -8,8 +9,157 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  String timeString = "";
+  String dateString = "";
+
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return SafeArea(
+      child: Scaffold(
+        backgroundColor: Colors.black87,
+        appBar: AppBar(
+          flexibleSpace: Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [
+                  Colors.deepOrange,
+                  Colors.green,
+                ],
+                begin: FractionalOffset(0.0, 0.0),
+                end: FractionalOffset(1.0, 0.0),
+                tileMode: TileMode.clamp,
+              ),
+            ),
+          ),
+          title: Text(
+            'Admin Home Page',
+            style: TextStyle(
+              fontSize: 20,
+              color: Colors.white,
+              letterSpacing: 1,
+            ),
+          ),
+        ),
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(12),
+                child: Text(
+                  '$timeString \n\n $dateString',
+                  style: TextStyle(
+                    fontSize: 20,
+                    color: Colors.white,
+                    letterSpacing: 1.5,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ElevatedButton.icon(
+                    onPressed: () {},
+                    icon: Icon(
+                      Icons.check_box,
+                      color: Colors.white,
+                    ),
+                    label: Text(
+                      'Aprovar Novos Itens'.toUpperCase(),
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.white,
+                        letterSpacing: 1.5,
+                      ),
+                    ),
+                    style: ButtonStyle(
+                      padding:
+                          MaterialStateProperty.all(const EdgeInsets.all(48)),
+                      backgroundColor:
+                          MaterialStateProperty.all<Color>(Colors.deepOrange),
+                      foregroundColor:
+                          MaterialStateProperty.all<Color>(Colors.white),
+                    ),
+                  ),
+                  const SizedBox(height: 24),
+                  const SizedBox(width: 24),
+                  ElevatedButton.icon(
+                    onPressed: () {},
+                    icon: Icon(Icons.person_pin_sharp, color: Colors.white),
+                    label: Text(
+                      'Contas'.toUpperCase(),
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.white,
+                        letterSpacing: 1.5,
+                      ),
+                    ),
+                    style: ButtonStyle(
+                      padding:
+                          MaterialStateProperty.all(const EdgeInsets.all(48)),
+                      backgroundColor:
+                          MaterialStateProperty.all<Color>(Colors.green),
+                      foregroundColor:
+                          MaterialStateProperty.all<Color>(Colors.white),
+                    ),
+                  ),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ElevatedButton.icon(
+                    onPressed: () {},
+                    icon: Icon(
+                      Icons.block_flipped,
+                      color: Colors.white,
+                    ),
+                    label: Text(
+                      'Contas Bloqueadas'.toUpperCase(),
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.white,
+                        letterSpacing: 1.5,
+                      ),
+                    ),
+                    style: ButtonStyle(
+                      padding:
+                          MaterialStateProperty.all(const EdgeInsets.all(48)),
+                      backgroundColor:
+                          MaterialStateProperty.all<Color>(Colors.green),
+                      foregroundColor:
+                          MaterialStateProperty.all<Color>(Colors.white),
+                    ),
+                  ),
+                  const SizedBox(height: 24),
+                  const SizedBox(width: 24),
+                  ElevatedButton.icon(
+                    onPressed: () {},
+                    icon: Icon(Icons.person_pin_sharp, color: Colors.white),
+                    label: Text(
+                      'Logout'.toUpperCase(),
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.white,
+                        letterSpacing: 1.5,
+                      ),
+                    ),
+                    style: ButtonStyle(
+                      padding:
+                          MaterialStateProperty.all(const EdgeInsets.all(48)),
+                      backgroundColor:
+                          MaterialStateProperty.all<Color>(Colors.deepOrange),
+                      foregroundColor:
+                          MaterialStateProperty.all<Color>(Colors.white),
+                    ),
+                  ),
+                ],
+              )
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }
