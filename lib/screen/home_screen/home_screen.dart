@@ -1,5 +1,8 @@
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -39,6 +42,7 @@ class _HomeScreenState extends State<HomeScreen> {
               letterSpacing: 1,
             ),
           ),
+          automaticallyImplyLeading: false,
         ),
         body: Center(
           child: Column(
@@ -47,7 +51,7 @@ class _HomeScreenState extends State<HomeScreen> {
               Padding(
                 padding: const EdgeInsets.all(12),
                 child: Text(
-                  '$timeString \n\n $dateString',
+                  '$timeString\n\n$dateString',
                   style: TextStyle(
                     fontSize: 20,
                     color: Colors.white,
@@ -59,27 +63,29 @@ class _HomeScreenState extends State<HomeScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  ElevatedButton.icon(
-                    onPressed: () {},
-                    icon: Icon(
-                      Icons.check_box,
-                      color: Colors.white,
-                    ),
-                    label: Text(
-                      'Aprovar Novos Itens'.toUpperCase(),
-                      style: TextStyle(
-                        fontSize: 16,
+                  Flexible(
+                    child: ElevatedButton.icon(
+                      onPressed: () {},
+                      icon: Icon(
+                        Icons.check_box,
                         color: Colors.white,
-                        letterSpacing: 1.5,
                       ),
-                    ),
-                    style: ButtonStyle(
-                      padding:
-                          MaterialStateProperty.all(const EdgeInsets.all(48)),
-                      backgroundColor:
-                          MaterialStateProperty.all<Color>(Colors.deepOrange),
-                      foregroundColor:
-                          MaterialStateProperty.all<Color>(Colors.white),
+                      label: Text(
+                        'Aprovar Novos Itens'.toUpperCase(),
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Colors.white,
+                          letterSpacing: 1.5,
+                        ),
+                      ),
+                      style: ButtonStyle(
+                        padding:
+                            MaterialStateProperty.all(const EdgeInsets.all(48)),
+                        backgroundColor:
+                            MaterialStateProperty.all<Color>(Colors.deepOrange),
+                        foregroundColor:
+                            MaterialStateProperty.all<Color>(Colors.white),
+                      ),
                     ),
                   ),
                   const SizedBox(height: 24),
@@ -109,27 +115,29 @@ class _HomeScreenState extends State<HomeScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  ElevatedButton.icon(
-                    onPressed: () {},
-                    icon: Icon(
-                      Icons.block_flipped,
-                      color: Colors.white,
-                    ),
-                    label: Text(
-                      'Contas Bloqueadas'.toUpperCase(),
-                      style: TextStyle(
-                        fontSize: 16,
+                  Flexible(
+                    child: ElevatedButton.icon(
+                      onPressed: () {},
+                      icon: Icon(
+                        Icons.block_flipped,
                         color: Colors.white,
-                        letterSpacing: 1.5,
                       ),
-                    ),
-                    style: ButtonStyle(
-                      padding:
-                          MaterialStateProperty.all(const EdgeInsets.all(48)),
-                      backgroundColor:
-                          MaterialStateProperty.all<Color>(Colors.green),
-                      foregroundColor:
-                          MaterialStateProperty.all<Color>(Colors.white),
+                      label: Text(
+                        'Contas Bloqueadas'.toUpperCase(),
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Colors.white,
+                          letterSpacing: 1.5,
+                        ),
+                      ),
+                      style: ButtonStyle(
+                        padding:
+                            MaterialStateProperty.all(const EdgeInsets.all(48)),
+                        backgroundColor:
+                            MaterialStateProperty.all<Color>(Colors.green),
+                        foregroundColor:
+                            MaterialStateProperty.all<Color>(Colors.white),
+                      ),
                     ),
                   ),
                   const SizedBox(height: 24),
@@ -160,6 +168,40 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
       ),
+    );
+  }
+
+  String formatDate(DateTime dateTime) {
+    return DateFormat('dd MMMM, yyyy').format(dateTime);
+  }
+
+  String formatTime(DateTime dateTime) {
+    return DateFormat('HH:mm:ss a').format(dateTime);
+  }
+
+  getTime() {
+    final DateTime now = DateTime.now();
+    final String formattedTime = formatTime(now);
+    final String formattedDate = formatDate(now);
+
+    if (this.mounted) {
+      setState(() {
+        timeString = formattedTime;
+        dateString = formattedDate;
+      });
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    dateString = formatDate(DateTime.now());
+    timeString = formatTime(DateTime.now());
+
+    Timer.periodic(
+      Duration(seconds: 1),
+      (Timer t) => getTime(),
     );
   }
 }
