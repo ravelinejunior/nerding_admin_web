@@ -119,13 +119,12 @@ class _ApproveAdsScreenState extends State<ApproveAdsScreen> {
                 Map<String, dynamic> adsData = {'status': 'approved'};
                 itensRef.doc(selectedDoc).update(adsData).then(
                   (value) {
-                    print('Aprovado com sucesso!');
-
+                    Navigator.of(context).pop();
                     Fluttertoast.showToast(
                       msg: "Aprovado com sucesso!",
                       toastLength: Toast.LENGTH_SHORT,
                       gravity: ToastGravity.CENTER,
-                      timeInSecForIosWeb: 3,
+                      timeInSecForIosWeb: 2,
                       webShowClose: true,
                       webPosition: 'center',
                       backgroundColor: Colors.red,
@@ -133,12 +132,12 @@ class _ApproveAdsScreenState extends State<ApproveAdsScreen> {
                       fontSize: 16.0,
                     ).then(
                       (value) {
-                        Future.delayed(Duration(seconds: 3));
-                        Navigator.of(context).pushReplacement(
-                          MaterialPageRoute(
-                            builder: (context) => HomeScreen(),
-                          ),
-                        );
+                        Future.delayed(Duration(seconds: 2)).then(
+                            (value) => Navigator.of(context).pushReplacement(
+                                  MaterialPageRoute(
+                                    builder: (context) => HomeScreen(),
+                                  ),
+                                ));
                       },
                     );
                   },
