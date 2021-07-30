@@ -1,8 +1,12 @@
 import 'dart:async';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:nerding_admin_web/screen/approved_ads_screen/approved_ads.dart';
+
+import '../../main.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -14,6 +18,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   String timeString = "";
   String dateString = "";
+  CollectionReference itensRef = FirebaseFirestore.instance.collection('Items');
 
   @override
   Widget build(BuildContext context) {
@@ -65,7 +70,13 @@ class _HomeScreenState extends State<HomeScreen> {
                 children: [
                   Flexible(
                     child: ElevatedButton.icon(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.of(context).pushReplacement(
+                          MaterialPageRoute(
+                            builder: (context) => ApproveAdsScreen(),
+                          ),
+                        );
+                      },
                       icon: Icon(
                         Icons.check_box,
                         color: Colors.white,
@@ -195,6 +206,12 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
+
+    itensRef.where('status', isEqualTo: 'not approved').get().then(
+      (results) {
+        ads = results;
+      },
+    );
 
     dateString = formatDate(DateTime.now());
     timeString = formatTime(DateTime.now());
