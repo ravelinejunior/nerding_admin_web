@@ -8,8 +8,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 
-import '../../main.dart';
-
 class ApproveAdsScreen extends StatefulWidget {
   const ApproveAdsScreen({Key? key}) : super(key: key);
 
@@ -18,7 +16,11 @@ class ApproveAdsScreen extends StatefulWidget {
 }
 
 class _ApproveAdsScreenState extends State<ApproveAdsScreen> {
+  QuerySnapshot? ads;
   FirebaseAuth _auth = FirebaseAuth.instance;
+  final CollectionReference itensRef =
+      FirebaseFirestore.instance.collection('Items');
+
   String? userName;
   String? userNumber;
   String? itemPrice;
@@ -28,7 +30,15 @@ class _ApproveAdsScreenState extends State<ApproveAdsScreen> {
   String? urlImage;
   String? itemLocation;
 
-  CollectionReference itensRef = FirebaseFirestore.instance.collection('Items');
+  @override
+  void initState() {
+    super.initState();
+    itensRef.where('status', isEqualTo: 'not approved').get().then(
+      (results) {
+        ads = results;
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -40,13 +50,25 @@ class _ApproveAdsScreenState extends State<ApproveAdsScreen> {
           Padding(
             padding: const EdgeInsets.all(12),
             child: IconButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(
+                    builder: (context) => ApproveAdsScreen(),
+                  ),
+                );
+              },
               icon: Icon(Icons.refresh, color: Colors.white),
             ),
           ),
         ],
         leading: IconButton(
-          onPressed: () {},
+          onPressed: () {
+            Navigator.of(context).pushReplacement(
+              MaterialPageRoute(
+                builder: (context) => HomeScreen(),
+              ),
+            );
+          },
           icon: Icon(
             Icons.arrow_back,
             color: Colors.white,
@@ -132,12 +154,9 @@ class _ApproveAdsScreenState extends State<ApproveAdsScreen> {
                       fontSize: 16.0,
                     ).then(
                       (value) {
-                        Future.delayed(Duration(seconds: 2)).then(
-                            (value) => Navigator.of(context).pushReplacement(
-                                  MaterialPageRoute(
-                                    builder: (context) => HomeScreen(),
-                                  ),
-                                ));
+                        Navigator.of(context).pushReplacement(MaterialPageRoute(
+                          builder: (context) => ApproveAdsScreen(),
+                        ));
                       },
                     );
                   },
@@ -155,7 +174,7 @@ class _ApproveAdsScreenState extends State<ApproveAdsScreen> {
   }
 
   Widget _showAdsList() {
-    if (ads != null) {
+    if (ads!.docs.isNotEmpty) {
       return ListView.builder(
         itemCount: ads!.docs.length,
         padding: const EdgeInsets.all(8),
@@ -281,6 +300,10 @@ class _ApproveAdsScreenState extends State<ApproveAdsScreen> {
             ],
           ),
         ),
+      );
+    } else if (ads!.docs.isEmpty) {
+      return Center(
+        child: Text('Não existem itens pendentes para aprovação.'),
       );
     } else {
       return Center(

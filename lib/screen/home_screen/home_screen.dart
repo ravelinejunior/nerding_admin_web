@@ -1,10 +1,13 @@
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:nerding_admin_web/screen/approved_ads_screen/approved_ads.dart';
+import 'package:nerding_admin_web/screen/blocked_account_screen/blocked_account_screen.dart';
+import 'package:nerding_admin_web/screen/login_screen/login_screen.dart';
 
 import '../../main.dart';
 
@@ -18,7 +21,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   String timeString = "";
   String dateString = "";
-  CollectionReference itensRef = FirebaseFirestore.instance.collection('Items');
+  final FirebaseAuth _auth = FirebaseAuth.instance;
 
   @override
   Widget build(BuildContext context) {
@@ -105,7 +108,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     onPressed: () {},
                     icon: Icon(Icons.person_pin_sharp, color: Colors.white),
                     label: Text(
-                      'Contas'.toUpperCase(),
+                      'Contas Ativas'.toUpperCase(),
                       style: TextStyle(
                         fontSize: 16,
                         color: Colors.white,
@@ -128,7 +131,13 @@ class _HomeScreenState extends State<HomeScreen> {
                 children: [
                   Flexible(
                     child: ElevatedButton.icon(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => BlockedAccountScreen(),
+                          ),
+                        );
+                      },
                       icon: Icon(
                         Icons.block_flipped,
                         color: Colors.white,
@@ -154,7 +163,15 @@ class _HomeScreenState extends State<HomeScreen> {
                   const SizedBox(height: 24),
                   const SizedBox(width: 24),
                   ElevatedButton.icon(
-                    onPressed: () {},
+                    onPressed: () {
+                      _auth.signOut().then(
+                            (value) => Navigator.of(context).pushReplacement(
+                              MaterialPageRoute(
+                                builder: (context) => LoginScreen(),
+                              ),
+                            ),
+                          );
+                    },
                     icon: Icon(Icons.person_pin_sharp, color: Colors.white),
                     label: Text(
                       'Logout'.toUpperCase(),
@@ -206,12 +223,6 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-
-    itensRef.where('status', isEqualTo: 'not approved').get().then(
-      (results) {
-        ads = results;
-      },
-    );
 
     dateString = formatDate(DateTime.now());
     timeString = formatTime(DateTime.now());
