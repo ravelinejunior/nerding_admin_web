@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/rendering.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:nerding_admin_web/screen/ads_description_screen/adsDescription.dart';
 import 'package:nerding_admin_web/screen/home_screen/home_screen.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
@@ -32,7 +33,6 @@ class _ApproveAdsScreenState extends State<ApproveAdsScreen> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     setState(() {
       itensRef.where('status', isEqualTo: 'not approved').get().then(
@@ -233,7 +233,20 @@ class _ApproveAdsScreenState extends State<ApproveAdsScreen> {
 
               //Add Image
               InkWell(
-                onDoubleTap: () {},
+                onDoubleTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => AdsDescription(
+                        title: ads!.docs[index].get('itemModel'),
+                        itemColor: ads!.docs[index].get('itemColor'),
+                        userNumber: ads!.docs[index].get('userPhoneNumber'),
+                        description: ads!.docs[index].get('description'),
+                        address: ads!.docs[index].get('address'),
+                        urlImage: ads!.docs[index].get('urlImage'),
+                      ),
+                    ),
+                  );
+                },
                 child: Padding(
                   padding: const EdgeInsets.all(16),
                   child: Image.network(
