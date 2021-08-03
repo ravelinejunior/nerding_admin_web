@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:nerding_admin_web/screen/active_account_screen/active_account.dart';
 import 'package:nerding_admin_web/screen/approved_ads_screen/approved_ads.dart';
 import 'package:nerding_admin_web/screen/blocked_account_screen/blocked_account_screen.dart';
 import 'package:nerding_admin_web/screen/login_screen/login_screen.dart';
@@ -22,6 +23,7 @@ class _HomeScreenState extends State<HomeScreen> {
   String timeString = "";
   String dateString = "";
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  CollectionReference itensRef = FirebaseFirestore.instance.collection('Items');
 
   @override
   Widget build(BuildContext context) {
@@ -74,7 +76,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   Flexible(
                     child: ElevatedButton.icon(
                       onPressed: () {
-                        Navigator.of(context).pushReplacement(
+                        Navigator.of(context).push(
                           MaterialPageRoute(
                             builder: (context) => ApproveAdsScreen(),
                           ),
@@ -105,7 +107,10 @@ class _HomeScreenState extends State<HomeScreen> {
                   const SizedBox(height: 24),
                   const SizedBox(width: 24),
                   ElevatedButton.icon(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => ActiveAccountScreen()));
+                    },
                     icon: Icon(Icons.person_pin_sharp, color: Colors.white),
                     label: Text(
                       'Contas Ativas'.toUpperCase(),
@@ -223,6 +228,12 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
+
+    itensRef.where('status', isEqualTo: 'not approved').get().then(
+      (results) {
+        ads = results;
+      },
+    );
 
     dateString = formatDate(DateTime.now());
     timeString = formatTime(DateTime.now());

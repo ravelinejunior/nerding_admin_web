@@ -4,9 +4,11 @@ import 'package:flutter/rendering.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:nerding_admin_web/screen/home_screen/home_screen.dart';
 import 'package:timeago/timeago.dart' as timeago;
-import 'package:flutter/cupertino.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
+
+import '../../main.dart';
 
 class ApproveAdsScreen extends StatefulWidget {
   const ApproveAdsScreen({Key? key}) : super(key: key);
@@ -16,10 +18,8 @@ class ApproveAdsScreen extends StatefulWidget {
 }
 
 class _ApproveAdsScreenState extends State<ApproveAdsScreen> {
-  QuerySnapshot? ads;
   FirebaseAuth _auth = FirebaseAuth.instance;
-  final CollectionReference itensRef =
-      FirebaseFirestore.instance.collection('Items');
+  CollectionReference itensRef = FirebaseFirestore.instance.collection('Items');
 
   String? userName;
   String? userNumber;
@@ -32,12 +32,15 @@ class _ApproveAdsScreenState extends State<ApproveAdsScreen> {
 
   @override
   void initState() {
+    // TODO: implement initState
     super.initState();
-    itensRef.where('status', isEqualTo: 'not approved').get().then(
-      (results) {
-        ads = results;
-      },
-    );
+    setState(() {
+      itensRef.where('status', isEqualTo: 'not approved').get().then(
+        (itemsFound) {
+          ads = itemsFound;
+        },
+      );
+    });
   }
 
   @override
@@ -155,7 +158,7 @@ class _ApproveAdsScreenState extends State<ApproveAdsScreen> {
                     ).then(
                       (value) {
                         Navigator.of(context).pushReplacement(MaterialPageRoute(
-                          builder: (context) => ApproveAdsScreen(),
+                          builder: (context) => HomeScreen(),
                         ));
                       },
                     );
@@ -174,7 +177,7 @@ class _ApproveAdsScreenState extends State<ApproveAdsScreen> {
   }
 
   Widget _showAdsList() {
-    if (ads!.docs.isNotEmpty) {
+    if (ads!.docs.length > 0) {
       return ListView.builder(
         itemCount: ads!.docs.length,
         padding: const EdgeInsets.all(8),
@@ -301,13 +304,13 @@ class _ApproveAdsScreenState extends State<ApproveAdsScreen> {
           ),
         ),
       );
-    } else if (ads!.docs.isEmpty) {
+    } else if (ads!.size == 0) {
       return Center(
         child: Text('Não existem itens pendentes para aprovação.'),
       );
     } else {
       return Center(
-        child: Text('Loading...'),
+        child: Text('Loading'),
       );
     }
   }

@@ -3,14 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:nerding_admin_web/screen/home_screen/home_screen.dart';
 
-class BlockedAccountScreen extends StatefulWidget {
-  const BlockedAccountScreen({Key? key}) : super(key: key);
+class ActiveAccountScreen extends StatefulWidget {
+  const ActiveAccountScreen({Key? key}) : super(key: key);
 
   @override
-  _BlockedAccountScreenState createState() => _BlockedAccountScreenState();
+  _ActiveAccountScreenState createState() => _ActiveAccountScreenState();
 }
 
-class _BlockedAccountScreenState extends State<BlockedAccountScreen> {
+class _ActiveAccountScreenState extends State<ActiveAccountScreen> {
   QuerySnapshot? usersSnapshot;
   CollectionReference usersRef = FirebaseFirestore.instance.collection('Users');
 
@@ -18,7 +18,7 @@ class _BlockedAccountScreenState extends State<BlockedAccountScreen> {
   @override
   void initState() {
     super.initState();
-    usersRef.where('status', isEqualTo: 'not approved').get().then(
+    usersRef.where('status', isEqualTo: 'approved').get().then(
       (usersFound) {
         setState(() {
           usersSnapshot = usersFound;
@@ -40,7 +40,7 @@ class _BlockedAccountScreenState extends State<BlockedAccountScreen> {
               onPressed: () {
                 Navigator.of(context).pushReplacement(
                   MaterialPageRoute(
-                    builder: (context) => BlockedAccountScreen(),
+                    builder: (context) => ActiveAccountScreen(),
                   ),
                 );
               },
@@ -74,7 +74,7 @@ class _BlockedAccountScreenState extends State<BlockedAccountScreen> {
             ),
           ),
         ),
-        title: const Text('Contas Bloqueadas'),
+        title: const Text('Contas Ativas'),
         centerTitle: true,
       ),
       body: Center(
@@ -150,7 +150,7 @@ class _BlockedAccountScreenState extends State<BlockedAccountScreen> {
                     color: Colors.white,
                   ),
                   label: Text(
-                    'Desbloquear essa conta'.toUpperCase(),
+                    'Bloquear essa conta'.toUpperCase(),
                     style: TextStyle(
                       fontSize: 14,
                       color: Colors.white,
@@ -173,9 +173,9 @@ class _BlockedAccountScreenState extends State<BlockedAccountScreen> {
           ),
         ),
       );
-    } else if (usersSnapshot != null && usersSnapshot!.size == 0) {
+    } else if (usersSnapshot == null || usersSnapshot!.size == 0) {
       return Center(
-        child: Text('Nenhum usuário bloqueado!'),
+        child: Text('Nenhum usuário ativo!'),
       );
     } else {
       return Center(
@@ -191,7 +191,7 @@ class _BlockedAccountScreenState extends State<BlockedAccountScreen> {
       builder: (_context) {
         return AlertDialog(
           title: Text(
-            'Desbloquear conta',
+            'Bloquear conta',
             style: TextStyle(color: Colors.black54),
             textAlign: TextAlign.center,
           ),
@@ -204,7 +204,7 @@ class _BlockedAccountScreenState extends State<BlockedAccountScreen> {
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
-                'Deseja desbloquear esta conta?',
+                'Deseja bloquear esta conta?',
               ),
             ],
           ),
@@ -228,13 +228,13 @@ class _BlockedAccountScreenState extends State<BlockedAccountScreen> {
               ),
               onPressed: () {
                 Map<String, dynamic> userData = {
-                  'status': 'approved',
+                  'status': 'not approved',
                 };
                 usersRef.doc(selectedDoc).update(userData).then(
                   (value) {
                     Navigator.of(context).pop();
                     Fluttertoast.showToast(
-                      msg: "Conta desbloqueada com sucesso".toUpperCase(),
+                      msg: "Conta bloqueada com sucesso".toUpperCase(),
                       toastLength: Toast.LENGTH_SHORT,
                       gravity: ToastGravity.CENTER,
                       timeInSecForIosWeb: 2,
@@ -247,7 +247,7 @@ class _BlockedAccountScreenState extends State<BlockedAccountScreen> {
                       (value) => {
                         Navigator.of(context).pushReplacement(
                           MaterialPageRoute(
-                            builder: (context) => BlockedAccountScreen(),
+                            builder: (context) => ActiveAccountScreen(),
                           ),
                         ),
                       },
@@ -256,7 +256,7 @@ class _BlockedAccountScreenState extends State<BlockedAccountScreen> {
                 );
               },
               child: Text(
-                'Desbloquear',
+                'Bloquear',
                 style: TextStyle(color: Colors.white),
               ),
             ),
